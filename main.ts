@@ -64,6 +64,18 @@ basic.forever(function () {
         dataL = pins.digitalReadPin(IR.l);
         console.log(dataL);
 
+        if (dataC === 0) {
+
+            setMotors(150, 150);
+        } else if (dataL === 0) {
+
+            setMotors(100, 150);
+        } else if (dataR === 0) {
+
+            setMotors(150, 100);
+        } else { setMotors(0, 0);
+        }
+
 
 
     } else {
