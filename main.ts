@@ -6,6 +6,20 @@ let trim = 0
 let canDrive = true
 let autoPilot = false
 
+type IRC = {
+    l: DigitalPin,
+    c: DigitalPin,
+    r: DigitalPin
+}
+const IR: IRC = {
+    l: DigitalPin.P14,
+    c: DigitalPin.P15,
+    r: DigitalPin.P13
+}
+pins.setPull(IR.l, PinPullMode.PullNone);
+pins.setPull(IR.c, PinPullMode.PullNone);
+pins.setPull(IR.r, PinPullMode.PullNone);
+
 function setMotors(leftSpeed: number, rightSpeed: number) {
     PCAmotor.MotorRun(PCAmotor.Motors.M1, leftSpeed)
     PCAmotor.MotorRun(PCAmotor.Motors.M4, rightSpeed)
@@ -13,7 +27,7 @@ function setMotors(leftSpeed: number, rightSpeed: number) {
 
 radio.onReceivedValue(function (name, value) {
     if (name === "x") {
-        x = value / 1, 75
+        x = value
     } else if (name === "y") {
         y = value
     } else if (name === "drive") {
@@ -21,12 +35,12 @@ radio.onReceivedValue(function (name, value) {
     } else if (name === "trim") {
         trim = value
     } else if (name === "autopilot") {
-        autoPilot = value === 1
+        autoPilot = true
     }
 })
 
 basic.forever(function () {
-    if (canDrive && !autoPilot) {
+    if (canDrive && autoPilot === false) {
         let leftSpeed = x - y - trim
         let rightSpeed = x + y + trim
 
@@ -37,9 +51,22 @@ basic.forever(function () {
 
         setMotors(leftSpeed, rightSpeed)
 
+    } else if (autoPilot === true) {
+
+        let dataR = pins.digitalReadPin(IR.r);
+        console.log(dataR);
+
+        let dataC: number;
+        dataC = pins.digitalReadPin(IR.c);
+        console.log(dataC);
+
+        let dataL: number;
+        dataL = pins.digitalReadPin(IR.l);
+        console.log(dataL);
+
+
 
     } else {
-
         PCAmotor.MotorStop(PCAmotor.Motors.M1)
         PCAmotor.MotorStop(PCAmotor.Motors.M4)
     }
@@ -47,6 +74,4 @@ basic.forever(function () {
     //basic.showNumber(y)
 
     basic.pause(25)
-}
-)
-
+})
