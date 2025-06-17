@@ -1,73 +1,69 @@
-radio.setGroup(23)
-
-let x = 0
-let y = 0
-let trim = 0
-let mode = "manual"
 
 type IRC = {
     l: DigitalPin,
-    c: DigitalPin,
-    r: DigitalPin
+    r: DigitalPin,
+    c: DigitalPin
 }
 const IR: IRC = {
     l: DigitalPin.P14,
+    r: DigitalPin.P13,
     c: DigitalPin.P15,
-    r: DigitalPin.P13
 }
+
 pins.setPull(IR.l, PinPullMode.PullNone);
 pins.setPull(IR.c, PinPullMode.PullNone);
 pins.setPull(IR.r, PinPullMode.PullNone);
 
-function setMotors(leftSpeed: number, rightSpeed: number) {
-    PCAmotor.MotorRun(PCAmotor.Motors.M1, leftSpeed)
-    PCAmotor.MotorRun(PCAmotor.Motors.M4, rightSpeed)
+basic.forever(function () {
+    let left = pins.digitalReadPin(IR.l)
+    let right = pins.digitalReadPin(IR.r)
+    let center = pins.digitalReadPin(IR.c)
+})
+
+function forward() {
+    PCAmotor.MotorRun(PCAmotor.Motors.M1, 175)
+    PCAmotor.MotorRun(PCAmotor.Motors.M4, 175)
+}
+function left() {
+    PCAmotor.MotorRun(PCAmotor.Motors.M1, 175)
+    PCAmotor.MotorRun(PCAmotor.Motors.M4, 125)
+}
+function right() {
+    PCAmotor.MotorRun(PCAmotor.Motors.M1, 125)
+    PCAmotor.MotorRun(PCAmotor.Motors.M4, 175)
+}
+function stop() {
+    PCAmotor.MotorStopAll()
 }
 
-radio.onReceivedValue(function (name, value) {
-    if (name === "trim") {
-        trim = value
-    } else if (name === "mode") {
-        mode = value === 1 ? "auto" : "manual"
-    }
-})
-
-radio.onReceivedString(function (receivedString: string) {
-    let parts = receivedString.split(",")
-    if (parts.length == 2) {
-        x = parseInt(parts[0])
-        y = parseInt(parts[1])
-    }
-})
-
 basic.forever(function () {
-    if (mode === "manual") {
-        let leftSpeed = x - y - trim
-        let rightSpeed = x + y + trim
+    let dataL = pins.digitalReadPin(IR.l)
+    let dataR = pins.digitalReadPin(IR.r)
+    let dataC = pins.digitalReadPin(IR.c)
+    
 
-        leftSpeed = Math.max(-255, Math.min(255, leftSpeed))
-        rightSpeed = Math.max(-255, Math.min(255, rightSpeed))
-
-        setMotors(leftSpeed, rightSpeed)
-    } else if (mode === "auto") {
-        let dataL = pins.digitalReadPin(IR.l)
-        let dataC = pins.digitalReadPin(IR.c)
-        let dataR = pins.digitalReadPin(IR.r)
-
-        if (dataC === 1) {
-            setMotors(150, 150)
-        } else if (dataL === 1) {
-            setMotors(150, 100)
-        } else if (dataR === 1) {
-            setMotors(100, 150)
-        } else {
-            setMotors(0, 0)
-        }
-
+    if (dataC === 0 && dataL === 1 && dataR === 1) {
+        forward()
+    } else if (dataL === 0) {
+        left()
+    } else if (dataR === 0) {
+        right()
     } else {
-        PCAmotor.MotorStop(PCAmotor.Motors.M1)
-        PCAmotor.MotorStop(PCAmotor.Motors.M4)
+        stop()
     }
 
-    basic.pause(25)
+
+    input.onButtonPressed(Button.AB, function() {
+        basic.showNumber(dataC)
+    })
+
+    input.onButtonPressed(Button.A, function () {
+        basic.showNumber(dataR)
+    })
+
+    input.onButtonPressed(Button.B, function () {
+        basic.showNumber(dataL)
+    })
+
+    basic.pause(20)
 })
