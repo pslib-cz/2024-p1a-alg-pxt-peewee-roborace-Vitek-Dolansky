@@ -16,63 +16,71 @@ pins.setPull(IR.r, PinPullMode.PullNone);
 
 
 
-function forward() {
-    PCAmotor.MotorRun(PCAmotor.Motors.M1, 100)
-    PCAmotor.MotorRun(PCAmotor.Motors.M4, -100)
-}
-function left() {
-    PCAmotor.MotorRun(PCAmotor.Motors.M1, 100)
-    PCAmotor.MotorRun(PCAmotor.Motors.M4, -50)
-}
-function right() {
-    PCAmotor.MotorRun(PCAmotor.Motors.M1, 50)
-    PCAmotor.MotorRun(PCAmotor.Motors.M4, -100)
-}
-function stop() {
-    PCAmotor.MotorStopAll()
-}
+//function forward() {
+//    PCAmotor.MotorRun(PCAmotor.Motors.M1, 200)
+//    PCAmotor.MotorRun(PCAmotor.Motors.M4, -200)
+//}
+//function left() {
+//    PCAmotor.MotorRun(PCAmotor.Motors.M1, 200)
+//    PCAmotor.MotorRun(PCAmotor.Motors.M4, -50)
+//}
+//function right() {
+//    PCAmotor.MotorRun(PCAmotor.Motors.M1, 50)
+//    PCAmotor.MotorRun(PCAmotor.Motors.M4, -200)
+//}
+
 
 let last_side = "";
+
+
 basic.forever(function () {
     let dataL = pins.digitalReadPin(IR.l)
     let dataR = pins.digitalReadPin(IR.r)
     let dataC = pins.digitalReadPin(IR.c)
 
-    console.log([dataL, dataC, dataR]);
-    console.log(last_side)
+    //console.log([dataL, dataC, dataR]);
+//
+    //console.log(last_side)
+    //
+//
+    //console.log(last_side)
+//
     if (dataC === 1) {
-        forward()
-        console.log("forward")
-    } else if (dataL === 1 && dataR === 0) {
-        left()
-        last_side = "l";
-        console.log("left")
-    } else if (dataR === 1 && dataL === 0) {
-        right()
-        last_side = "r";
-        console.log("right")
-    } else {
+        //forward()
+        //console.log("forward")
+        PCAmotor.MotorRun(PCAmotor.Motors.M1, 200)
+        PCAmotor.MotorRun(PCAmotor.Motors.M4, -200)
+        basic.pause(10)
+
+    } 
+    //else 
+    if (dataL === 1) {
+        //left()
+        PCAmotor.MotorRun(PCAmotor.Motors.M1, 150)
+        PCAmotor.MotorRun(PCAmotor.Motors.M4, 100)
+        //last_side = "l"
+        //console.log("left")
+        basic.pause(10)
+    } 
+    //else 
+    if (dataR === 1) {
+        //right()
+        PCAmotor.MotorRun(PCAmotor.Motors.M1, -100)
+        PCAmotor.MotorRun(PCAmotor.Motors.M4, -150)
+        //last_side = "r"
+        //console.log("right")
+        basic.pause(10)
+    } /*else {
         
         if (last_side === "r") {
-            right()
+            PCAmotor.MotorRun(PCAmotor.Motors.M1, -100)
+            PCAmotor.MotorRun(PCAmotor.Motors.M4, -200)
         }
         else if (last_side === "l") {
-            left()
+            PCAmotor.MotorRun(PCAmotor.Motors.M1, 200)
+            PCAmotor.MotorRun(PCAmotor.Motors.M4, 100)
         }
-    }
+    } */
 
-
-    input.onButtonPressed(Button.AB, function () {
-        basic.showNumber(dataC)
-    })
-
-    input.onButtonPressed(Button.A, function () {
-        basic.showNumber(dataR)
-    })
-
-    input.onButtonPressed(Button.B, function () {
-        basic.showNumber(dataL)
-    })
-
-    basic.pause(20)
+    basic.pause(10)
 })
