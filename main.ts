@@ -22,16 +22,16 @@ basic.forever(function () {
 
 
 function forward() {
-    PCAmotor.MotorRun(PCAmotor.Motors.M1, 175)
-    PCAmotor.MotorRun(PCAmotor.Motors.M4, -175)
+    PCAmotor.MotorRun(PCAmotor.Motors.M1, 150)
+    PCAmotor.MotorRun(PCAmotor.Motors.M4, -150)
 }
 function left() {
-    PCAmotor.MotorRun(PCAmotor.Motors.M1, 150)
-    PCAmotor.MotorRun(PCAmotor.Motors.M4, -90)
+    PCAmotor.MotorRun(PCAmotor.Motors.M1, 100)
+    PCAmotor.MotorRun(PCAmotor.Motors.M4, -50)
 }
 function right() {
-    PCAmotor.MotorRun(PCAmotor.Motors.M1, 90)
-    PCAmotor.MotorRun(PCAmotor.Motors.M4, -150)
+    PCAmotor.MotorRun(PCAmotor.Motors.M1, 50)
+    PCAmotor.MotorRun(PCAmotor.Motors.M4, -100)
 }
 function stop() {
     PCAmotor.MotorStopAll()
@@ -44,7 +44,7 @@ basic.forever(function () {
     let dataC = pins.digitalReadPin(IR.c)
     
 
-    if (dataC === 0 && dataL === 1 && dataR === 1) {
+    if (dataC === 1 && dataL === 0 && dataR === 0) {
         forward()
     } else if (dataL === 0) {
         left()
