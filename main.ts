@@ -5,9 +5,9 @@ type IRC = {
     c: DigitalPin
 }
 const IR: IRC = {
-    l: DigitalPin.P14,
-    r: DigitalPin.P15,
-    c: DigitalPin.P13,
+    l: DigitalPin.P15,
+    r: DigitalPin.P13,
+    c: DigitalPin.P14,
 }
 
 pins.setPull(IR.l, PinPullMode.PullNone);
@@ -26,12 +26,12 @@ function forward() {
     PCAmotor.MotorRun(PCAmotor.Motors.M4, -175)
 }
 function left() {
-    PCAmotor.MotorRun(PCAmotor.Motors.M1, 175)
-    PCAmotor.MotorRun(PCAmotor.Motors.M4, -75)
+    PCAmotor.MotorRun(PCAmotor.Motors.M1, 150)
+    PCAmotor.MotorRun(PCAmotor.Motors.M4, -90)
 }
 function right() {
-    PCAmotor.MotorRun(PCAmotor.Motors.M1, 75)
-    PCAmotor.MotorRun(PCAmotor.Motors.M4, -175)
+    PCAmotor.MotorRun(PCAmotor.Motors.M1, 90)
+    PCAmotor.MotorRun(PCAmotor.Motors.M4, -150)
 }
 function stop() {
     PCAmotor.MotorStopAll()
