@@ -20,21 +20,23 @@ basic.forever(function () {
     let center = pins.digitalReadPin(IR.c)
 })
 
+
 function forward() {
     PCAmotor.MotorRun(PCAmotor.Motors.M1, 175)
-    PCAmotor.MotorRun(PCAmotor.Motors.M4, 175)
+    PCAmotor.MotorRun(PCAmotor.Motors.M4, -175)
 }
 function left() {
     PCAmotor.MotorRun(PCAmotor.Motors.M1, 175)
-    PCAmotor.MotorRun(PCAmotor.Motors.M4, 125)
+    PCAmotor.MotorRun(PCAmotor.Motors.M4, -125)
 }
 function right() {
     PCAmotor.MotorRun(PCAmotor.Motors.M1, 125)
-    PCAmotor.MotorRun(PCAmotor.Motors.M4, 175)
+    PCAmotor.MotorRun(PCAmotor.Motors.M4, -175)
 }
 function stop() {
     PCAmotor.MotorStopAll()
 }
+
 
 basic.forever(function () {
     let dataL = pins.digitalReadPin(IR.l)
