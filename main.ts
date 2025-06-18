@@ -30,7 +30,7 @@ pins.setPull(IR.r, PinPullMode.PullNone);
 //}
 
 
-let last_side = "";
+//let last_side = "";
 
 
 basic.forever(function () {
