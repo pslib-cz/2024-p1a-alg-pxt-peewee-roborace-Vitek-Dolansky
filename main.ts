@@ -14,11 +14,6 @@ pins.setPull(IR.l, PinPullMode.PullNone);
 pins.setPull(IR.c, PinPullMode.PullNone);
 pins.setPull(IR.r, PinPullMode.PullNone);
 
-basic.forever(function () {
-    let left = pins.digitalReadPin(IR.l)
-    let right = pins.digitalReadPin(IR.r)
-    let center = pins.digitalReadPin(IR.c)
-})
 
 
 function forward() {
@@ -42,13 +37,12 @@ basic.forever(function () {
     let dataL = pins.digitalReadPin(IR.l)
     let dataR = pins.digitalReadPin(IR.r)
     let dataC = pins.digitalReadPin(IR.c)
-    
-
-    if (dataC === 1 && dataL === 0 && dataR === 0) {
+    console.log([dataL, dataC, dataR]);
+    if (dataC === 1) {
         forward()
-    } else if (dataL === 0) {
+    } else if (dataL === 1) {
         left()
-    } else if (dataR === 0) {
+    } else if (dataR === 1) {
         right()
     } else {
         stop()
